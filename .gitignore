@@ -141,3 +141,24 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+
+# Helm
+*.tgz
+
+# Secrets & credentials
+*.pem
+*.key
+.env
+kubeconfig
+
+# OS
+.DS_Store
