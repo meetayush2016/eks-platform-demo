@@ -149,7 +149,7 @@ vite.config.ts.timestamp-*
 *.tfstate
 *.tfstate.backup
 *.tfvars
-.terraform.lock.hcl
+
 
 # Helm
 *.tgz
