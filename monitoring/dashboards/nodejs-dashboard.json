@@ -1,0 +1,53 @@
+{
+  "dashboard": {
+    "title": "EKS Platform Demo - Node.js App",
+    "panels": [
+      {
+        "title": "Pod CPU Usage",
+        "type": "graph",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "targets": [
+          {
+            "expr": "rate(container_cpu_usage_seconds_total{namespace='production'}[5m])",
+            "legendFormat": "{{pod}}"
+          }
+        ]
+      },
+      {
+        "title": "Pod Memory Usage",
+        "type": "graph",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "targets": [
+          {
+            "expr": "container_memory_usage_bytes{namespace='production'}",
+            "legendFormat": "{{pod}}"
+          }
+        ]
+      },
+      {
+        "title": "Pod Restarts",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 8 },
+        "targets": [
+          {
+            "expr": "kube_pod_container_status_restarts_total{namespace='production'}",
+            "legendFormat": "{{pod}}"
+          }
+        ]
+      },
+      {
+        "title": "Running Pods",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 8 },
+        "targets": [
+          {
+            "expr": "count(kube_pod_status_phase{namespace='production', phase='Running'})",
+            "legendFormat": "Running Pods"
+          }
+        ]
+      }
+    ],
+    "schemaVersion": 16,
+    "version": 1
+  }
+}
