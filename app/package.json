@@ -1,0 +1,15 @@
+{
+  "name": "eks-platform-demo",
+  "version": "1.0.0",
+  "description": "Simple REST API for EKS capstone",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
