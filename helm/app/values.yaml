@@ -1,0 +1,64 @@
+# ──────────────────────────────────────────────
+# Replica count (overridden by HPA after deploy)
+# ──────────────────────────────────────────────
+replicaCount: 2
+
+# ──────────────────────────────────────────────
+# Container image
+# ──────────────────────────────────────────────
+image:
+  repository: 739086995691.dkr.ecr.ap-south-1.amazonaws.com/eks-platform-demo
+  tag: "v1.0.0"        # GitHub Actions overrides this with --set image.tag=<git-sha>
+  pullPolicy: IfNotPresent
+
+# ──────────────────────────────────────────────
+# Kubernetes Service
+# ──────────────────────────────────────────────
+service:
+  type: ClusterIP
+  port: 80             # Service port (external-facing inside cluster)
+  targetPort: 3000     # Your Express app listens on 3000
+
+# ──────────────────────────────────────────────
+# AWS ALB Ingress
+# ──────────────────────────────────────────────
+ingress:
+  enabled: true
+  className: "alb"
+  host: "eks-demo.example.com"   # Replace with your real domain later
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+# ──────────────────────────────────────────────
+# Resource requests and limits
+# ──────────────────────────────────────────────
+resources:
+  requests:
+    cpu: "100m"        # 0.1 vCPU guaranteed
+    memory: "128Mi"
+  limits:
+    cpu: "250m"        # Hard ceiling — container killed if exceeded
+    memory: "256Mi"
+
+# ──────────────────────────────────────────────
+# Horizontal Pod Autoscaler
+# ──────────────────────────────────────────────
+hpa:
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+# ──────────────────────────────────────────────
+# Health probe settings
+# ──────────────────────────────────────────────
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 15    # Give Node.js time to start before first check
+    periodSeconds: 20
+  readiness:
+    path: /health
+    initialDelaySeconds: 5     # Check readiness sooner — fail fast on bad deploys
+    periodSeconds: 10
