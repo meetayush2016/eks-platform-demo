@@ -47,3 +47,20 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-south-1
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --region ap-south-1 \
+            --name ayush-demo-cluster
+
+      - name: Deploy with Helm
+        env:
+          ECR_REGISTRY: 739086995691.dkr.ecr.ap-south-1.amazonaws.com
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          helm upgrade --install eks-demo helm/app/ \
+            --namespace production \
+            --create-namespace \
+            --set image.tag=$IMAGE_TAG
